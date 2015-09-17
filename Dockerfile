@@ -1,21 +1,47 @@
-FROM	phusion/baseimage
-# IMAGE mazaclub/coind-base
-RUN     apt-get update \
-          && apt-get install -y libboost-all-dev \
-	    dh-autoreconf \
-            libcurl4-openssl-dev \
-            git apg  libboost-all-dev build-essential \
-	  && curl http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz -o db-4.8.30.NC.tar.gz \
-          && tar -xf db-4.8.30.NC.tar.gz \
-          && cd db-4.8.30.NC/build_unix \
-          && mkdir -p build \
-          && BDB_PREFIX=$(pwd)/build \
-          && ../dist/configure --disable-shared --enable-cxx --with-pic --prefix=$BDB_PREFIX \
-          && make install \
-          && cd / \
-          && rm -rf /etc/service/* \
-          && apt-get autoremove -y \
-          && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# version 1.4-1
+FROM        mazaclub/coind-base
+# IMAGE     mazaclub/dashd-base
+MAINTAINER  guruvan "guruvan@maza.club"
 
-ENV	BDB_PREFIX=/db-4.8.30.NC/build_unix/build
-COPY	  . /
+#XPOSE      RPC   P2P   Testnet
+CMD         ["/sbin/my_init"]
+VOLUME      ["/home/coin"] 
+EXPOSE      9998 9999
+
+ENV BUILDER DOCKERHUB
+ENV WORKDIR $(pwd)
+ENV IMAGE mazaclubh/dashd-base
+ENV APP dashd 
+ENV COIN dash
+ENV COIN_SYM dash
+ENV STAGE PROD
+RUN  set -x && apt-get update \
+     && apt-get install -y libtool \
+         wget bsdmainutils autoconf \
+         apg libqrencode-dev libcurl4-openssl-dev \
+         automake make ntp git build-essential \
+         libssl-dev libboost-all-dev \
+     && export COIN=dash \
+     && export APP=dashd \
+     && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS="" ; fi \
+     && git clone https://github.com/dashpay/dash ${COIN} \
+     && cd ${COIN} \
+     && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
+     && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
+     && ./autogen.sh \
+     && LDFLAGS="-L${BDB_PREFIX}/lib" CPPFLAGS="-I${BDB_PREFIX}/include/ ${CPPFLAGS}" ./configure --enable-cxx --disable-shared --with-pic \
+     && cd src  \
+     && sed -i 's/USE_UPNP\:\=0/USE_UPNP\:\=\-/g' Makefile \
+     && make \
+     && make ${MAKEJOBS} install \
+     && mv ${APP} /usr/local/bin/ \
+     && cd / \
+     && rm -rf /dash
+ 
+
+COPY . /
+RUN   chmod 700 /etc/service/dashd/run \
+      && groupadd --gid 2211 coin \
+      && adduser --disabled-password --gecos "dash" --uid 2211 --gid 2211 coin \
+      && chown -R coin.coin /home/coin \
+      && chmod 600 /home/coin/.dash/dash.conf 
