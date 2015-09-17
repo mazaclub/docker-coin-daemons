@@ -1,28 +1,32 @@
-# docker-coinds
+## startcoin/startcoind-base
 
-Base image for typical bitcoin-derived coin daemons, provides BDB 4.8 compiled from source
+Base image for running startcoind inside docker container
 
-Each coin is placed in its own branch, as is the base image
+Basic instruction is contained in run-startcoind-docker.sh
 
-Examples are available for series 0.8 and 0.9+ coinds 
+ * FROM phusion/baseimage
+   - provides full environment +  docker-ready init system  
+ * FROM mazaclub/coind-base
+   - provides all dependencies needed to build most coin daemons, including bdb4.8
 
-Each Branch supports an automated build 
- Base = maazaclub/coind-base
- MZC  = mazaclub/mazacoind-base
- NMC  = mazaclub/namecoind-base
- DASH = mazaclub/dashpay-base
- etc
 
-mazaclub/XXXcoind-base Images are 
- FROM phusion/baseimage
- FROM mazaclub/coind-base
+Available as a Dockerhub Automated Trusted Build
 
-Simple example shell script to run coind images is included in each coind branch
+   docker pull startcoin/startcoind-base
 
-Intended to provide a known base for coin daemon us in applications, such as blockexplorers, 
-electrum/encompass-mercury servers, API services, and more.  
+Dockerhub build 
+ - starts with mazaclub/coind-base 
+ - installs required deps via apt
+ - pulls startcoin from official startcoin github source, 
+ - compiles, installs & cleans src. 
+ - adds supporting startcoin.conf and startup script to start startcoind
 
-Pull requests are welcomed. Please submit PRs to Develop branch. 
+To use, simply run the included script, or provide a similar docker run statement
 
-For further use, see https://github.com/mazaclub/docker-encompass-mercury
-            
+The container will start /sbin/my_init which will start startcoind
+
+This image is suited for further use by blockexplorer or other server applications
+
+Several runtime ENV variables are recognized
+ - etc/service/startcoind/run 
+ 
