@@ -14,6 +14,7 @@ ENV WORKDIR $(pwd)
 ENV IMAGE freicoin/freicoind-base
 ENV APP freicoind 
 ENV COIN freicoin
+ENV COIN_SYM frc
 ENV STAGE PROD
 RUN  apt-get update \
      && apt-get install -y libtool \
