@@ -17,7 +17,7 @@ ENV COIN_SYM nmc
 ENV STAGE PROD
 RUN  set -x && apt-get update \
      && apt-get install -y libtool \
-         wget bsdmainutils autoconf \
+         libevent-dev wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
          libssl-dev libboost-all-dev 
