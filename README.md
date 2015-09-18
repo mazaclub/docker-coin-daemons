@@ -1,6 +1,6 @@
-# docker-coinds
+# docker-coin-daemons
 
-Base image for typical bitcoin-derived coin daemons, provides BDB 4.8 compiled from source
+Base images for typical bitcoin-derived coin daemons, provides BDB 4.8 compiled from official, or mazaclub source
 
 Each coin is placed in its own branch, as is the base image
 
@@ -18,6 +18,8 @@ mazaclub/XXXcoind-base Images are
  FROM mazaclub/coind-base
 
 Simple example shell script to run coind images is included in each coind branch
+Unit files suitable for deployment on coreos are also included. 
+ - images are used in mazaclub's production network via coreos with nearly identical unit files. 
 
 Intended to provide a known base for coin daemon us in applications, such as blockexplorers, 
 electrum/encompass-mercury servers, API services, and more.  
