@@ -23,7 +23,7 @@ RUN  apt-get update \
          automake make ntp git build-essential \
          libssl-dev libboost-all-dev \
          libgmp-dev libmpfr-dev 
-RUN echo "Building Daemon \
+RUN echo "Building Daemon" \
      && export COIN=freicoin \
      && export APP=freicoind \
      && git clone https://github.com/${COIN}/${COIN} ${COIN} \
