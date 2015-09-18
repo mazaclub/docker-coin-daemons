@@ -24,7 +24,7 @@ RUN  set -x && apt-get update \
 RUN echo "Building daemon" \
      && export COIN=mazacoin \
      && export APP=mazacoind \
-     && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS="" \
+     && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS=""; fi \
      && git clone https://github.com/mazacoin/mazacoin-new ${COIN} \
      && cd ${COIN} \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
