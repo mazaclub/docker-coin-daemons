@@ -8,22 +8,26 @@ CMD         ["/sbin/my_init"]
 VOLUME      ["/home/coin"] 
 EXPOSE      1441 1331
 
+ENV BUILDER DOCKERHUB
 ENV GIT_TAG $(git rev-parse --short HEAD)
 ENV WORKDIR $(pwd)
 ENV IMAGE groestlcoin/groestlcoind-base
 ENV APP GroestlCoind 
 ENV COIN GroestlCoin
+ENV COIN_SYM grs
 ENV STAGE PROD
-ENV MAKEJOBS 4
+
 RUN  apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
-         libssl-dev libboost-all-dev \
+         libssl-dev libboost-all-dev 
+RUN echo "Building Daemon" \
      && export COIN=GroestlCoin \
      && export APP=GroestlCoind \
      && git clone https://github.com/${COIN}/${COIN} ${COIN} \
+     && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ;else export MAKEJOBS="" ; fi \
      && cd ${COIN}/src \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \

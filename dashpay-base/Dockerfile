@@ -20,7 +20,8 @@ RUN  set -x && apt-get update \
          wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
-         libssl-dev libboost-all-dev \
+         libssl-dev libboost-all-dev 
+RUN echo "Building daemon" \
      && export COIN=dash \
      && export APP=dashd \
      && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS="" ; fi \

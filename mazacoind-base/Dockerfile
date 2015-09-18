@@ -8,22 +8,23 @@ CMD         ["/sbin/my_init"]
 VOLUME      ["/home/coin"] 
 EXPOSE      12832 12835
 
+ENV BUILDER DOCKERHUB
 ENV WORKDIR $(pwd)
 ENV IMAGE mazalub/mazacoind-base
 ENV APP mazacoind 
 ENV COIN mazacoin
 ENV COIN_SYM mzc
 ENV STAGE PROD
-ENV MAKEJOBS 4
 RUN  set -x && apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
-         libssl-dev libboost-all-dev \
+         libssl-dev libboost-all-dev 
+RUN echo "Building daemon" \
      && export COIN=mazacoin \
      && export APP=mazacoind \
-     && export MAKEJOBS=4 \
+     && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS="" \
      && git clone https://github.com/mazacoin/mazacoin-new ${COIN} \
      && cd ${COIN} \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
