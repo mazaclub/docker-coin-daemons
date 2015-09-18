@@ -17,13 +17,13 @@ Available as a Dockerhub Automated Trusted Build
 Dockerhub build 
  - starts with mazaclub/coind-base 
  - installs required deps via apt
- - pulls GroestlCoin from official GroestlCoin github source, 
+ - pulls groestlcoin from official groestlcoin github source, 
  - compiles, installs & cleans src. 
- - adds supporting GroestlCoin.conf and startup script to start GroestlCoind
+ - adds supporting groestlcoin.conf and startup script to start groestlcoind
 
 To use, simply run the included script, or provide a similar docker run statement
 
-The container will start /sbin/my_init which will start GroestlCoind
+The container will start /sbin/my_init which will start groestlcoind
 
 This image is suited for further use by blockexplorer or other server applications
 
