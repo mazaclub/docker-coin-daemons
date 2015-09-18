@@ -8,22 +8,24 @@ CMD         ["/sbin/my_init"]
 VOLUME      ["/home/coin"] 
 EXPOSE      8334 8336
 
+ENV BUILDER DOCKERHUB
 ENV WORKDIR $(pwd)
 ENV IMAGE namecoin/namecoind-base
 ENV APP namecoind 
 ENV COIN namecoin
 ENV COIN_SYM nmc
 ENV STAGE PROD
-ENV MAKEJOBS 4
 RUN  set -x && apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
-         libssl-dev libboost-all-dev \
+         libssl-dev libboost-all-dev 
+
+RUN echo "Building Daemon" \
      && export COIN=namecoin \
      && export APP=namecoind \
-     && export MAKEJOBS=4 \
+     && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS="" ; fi \
      && git clone https://github.com/namecoin/namecore ${COIN} \
      && cd ${COIN} \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
@@ -32,7 +34,7 @@ RUN  set -x && apt-get update \
      && LDFLAGS="-L${BDB_PREFIX}/lib" CPPFLAGS="-I${BDB_PREFIX}/include/ ${CPPFLAGS}" ./configure --enable-cxx --disable-shared --with-pic \
      && cd src  \
      && sed -i 's/USE_UPNP\:\=0/USE_UPNP\:\=\-/g' Makefile \
-     && make -j ${MAKEJOBS} \
+     && make  ${MAKEJOBS} \
      && make install \
      && mv ${APP} /usr/local/bin/ \
      && cd / \
