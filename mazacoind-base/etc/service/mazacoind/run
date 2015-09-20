@@ -10,15 +10,14 @@ RPCPORT=${RPCPORT:-12835}
 P2PPORT=${P2PPORT:-12832}
 
 # 
-sed '/reindex/d' ${COINDIR}/${COIN}.conf > new
-mv new ${COINDIR}/${COIN}.conf
-sed '/txindex/d' ${COINDIR}/${COIN}.conf > new
-mv new ${COINDIR}/${COIN}.conf
+sed '/reindex/d' ${COINDIR}/${COIN}.conf > /tmp/newconf
+sed  '/txindex/d' /tmp/newconf > "${COINDIR}"/"${COIN}".conf
 
 
 mk_rpcpass () {
    echo "$(date +%m-%d:%Y:%H:%M) making rpcpassword"
-   sed -i '/rpcpassword/d' "${COINDIR}"/${COIN}.conf 
+   sed -e '/rpcpassword/d' "${COINDIR}"/${COIN}.conf > /tmp/"${COIN}".newconf
+   cp /tmp/${COIN}.newconf  "${COINDIR}"/${COIN}.conf
    pass="$(apg -a0 -n1 -m64 -x64)" 
    echo "rpcpassword=${pass}" >> "${COINDIR}"/${COIN}.conf   
 }
