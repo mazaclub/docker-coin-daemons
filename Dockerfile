@@ -6,7 +6,7 @@ MAINTAINER  guruvan "guruvan@maza.club"
 #XPOSE      RPC   P2P   Testnet
 CMD         ["/sbin/my_init"]
 VOLUME      ["/home/coin"] 
-EXPOSE      12832 12835
+EXPOSE      8332 8333
 
 ENV BUILDER DOCKERHUB
 ENV WORKDIR $(pwd)
@@ -20,7 +20,7 @@ RUN  set -x && apt-get update \
          wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
-         libssl-dev libboost-all-dev 
+         libssl-dev libevent-dev libboost-all-dev 
 RUN echo "Building daemon" \
      && export COIN=bitcoin \
      && export APP=bitcoind \
