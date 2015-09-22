@@ -32,7 +32,7 @@ RUN echo "Building Daemon" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
      && sed -i 's/USE_UPNP\:\=0/USE_UPNP\:\=\-/g' makefile.unix \
      && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS="" ; fi \
-     && make -j ${MAKEJOBS} -f makefile.unix \
+     && make ${MAKEJOBS} -f makefile.unix \
      && mv ${APP} /usr/local/bin/ \
      && cd / \
      && rm -rf /src
