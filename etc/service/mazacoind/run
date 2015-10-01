@@ -61,7 +61,13 @@ then
    echo "rpcport=${RPCPORT}" >> "${COINDIR}"/${COIN}.conf
    mv /tmp/newconf "${COINDIR}"/${COIN}.conf
 fi
-
+allowip=$(grep -m 1 "rpcallowip=" ${COINDIR}/${COIN}.conf | awk -F\= '{print $2}')
+test -z ${allowip} && if [ -f /home/${USER}/.${COIN}/coin-daemon_rpcallowip.conf ]
+ then
+   while read line ; do
+     echo "rpcallowip=${line}"  >> "${COINDIR}"/${COIN}.conf
+   done < /home/${USER}/.${COIN}/coin-daemon_rpcallowip.conf
+ fi
 ## TODO Add rpcallowip and additional server settings
 
 echo "$(date +%m-%d:%Y:%H:%M) Starting ${COIN}d"
