@@ -15,6 +15,7 @@ ENV APP mazacoind
 ENV COIN mazacoin
 ENV COIN_SYM mzc
 ENV STAGE PROD
+ENV COMMIT 71d8144010bcfa8389efa2da0a277411e52ef488
 RUN  set -x && apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
@@ -27,6 +28,7 @@ RUN echo "Building daemon" \
      && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS=""; fi \
      && git clone https://github.com/mazacoin/mazacoin-new ${COIN} \
      && cd ${COIN} \
+     && git checkout 71d8144010bcfa8389efa2da0a277411e52ef488 \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
      && ./autogen.sh \
