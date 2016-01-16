@@ -1,6 +1,6 @@
 # version 1.4-1
 FROM        mazaclub/coind-base
-# IMAGE     mazaclub/freicoind-base
+# IMAGE     mazaclub/btc-therealbitcoin-base
 MAINTAINER  guruvan "guruvan@maza.club"
 
 #XPOSE      RPC   P2P   Testnet
@@ -11,11 +11,12 @@ EXPOSE      8639 8639
 ENV BUILDER DOCKERHUB
 ENV GIT_TAG $(git rev-parse --short HEAD)
 ENV WORKDIR $(pwd)
-ENV IMAGE freicoin/freicoind-base
-ENV APP freicoind 
-ENV COIN freicoin
-ENV COIN_SYM frc
-ENV STAGE PROD
+ENV IMAGE bitcoin/btc-therealbitcoin-base
+ENV APP bitcoind 
+ENV COIN bitcoin
+ENV COIN_SYM btc
+ENV STAGE DEV
+ENV BTC_VERSION thereealbitcoin
 RUN  apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
@@ -24,9 +25,11 @@ RUN  apt-get update \
          libssl-dev libboost-all-dev \
          libgmp-dev libmpfr-dev 
 RUN echo "Building Daemon" \
-     && export COIN=freicoin \
-     && export APP=freicoind \
-     && git clone https://github.com/${COIN}/${COIN} ${COIN} \
+     && export COIN=bitcoin \
+     && export APP=bitcoind \
+     && wget http://thebitcoin.foundation/v0.5.3-0-gd05c03a.tar.gz \
+     && echo "aab1f8ea8c7f131ff69dfa3b9437ba35531018be760132dd6373f41a591f6382  v0.5.3-0-gd05c03a.tar.gz" > v0.5.3-0-gd05c03a.tar.gz.sha256 \
+     && sha256sum -c v0.5.3-0-gd05c03a.tar.gz \
      && cd ${COIN}/src \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
@@ -39,8 +42,8 @@ RUN echo "Building Daemon" \
  
 
 COPY . /
-RUN   chmod 700 /etc/service/freicoind/run \
+RUN   chmod 700 /etc/service/bitcoind/run \
       && groupadd --gid 2211 coin \
-      && adduser --disabled-password --gecos "freicoin" --uid 2211 --gid 2211 coin \
+      && adduser --disabled-password --gecos "bitcoin" --uid 2211 --gid 2211 coin \
       && chown -R coin.coin /home/coin \
-      && chmod 600 /home/coin/.freicoin/freicoin.conf 
+      && chmod 600 /home/coin/.bitcoin/bitcoin.conf 

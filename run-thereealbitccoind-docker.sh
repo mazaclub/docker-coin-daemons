@@ -4,4 +4,4 @@ docker run -d \
   -e RPCPORT=1441 \
   -e P2PPORT=1331 \
   -v /opt/BIGDISK/FRC/home/coin:/home/coin \
-  mazaclub/freicoind-base
+  mazaclub/bitcoind-base
