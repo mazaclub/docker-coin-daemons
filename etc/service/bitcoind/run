@@ -3,7 +3,7 @@ source /etc/container_environment.sh
 TXINDEX=${TXINDEX:-0}
 REINDEX=${REINDEX:-0}
 USER=${USER:-coin}
-COIN=${COIN:-mazacoin}
+COIN=${COIN:-bitcoin}
 COINDIR=${COINDIR:-/home/coin/.${COIN}}
 RPCPASSWORD=${RPCPASSWORD}
 RPCPORT=${RPCPORT:-8332}
