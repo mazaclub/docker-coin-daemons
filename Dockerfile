@@ -1,6 +1,6 @@
 # version 1.4-1
 FROM        mazaclub/coind-base
-# IMAGE     mazaclub/bitcoind-base
+# IMAGE     mazaclub/btc-classic-base
 MAINTAINER  guruvan "guruvan@maza.club"
 
 #XPOSE      RPC   P2P   Testnet
@@ -14,7 +14,8 @@ ENV IMAGE mazalub/bitcoind-base
 ENV APP bitcoind 
 ENV COIN bitcoin
 ENV COIN_SYM btc 
-ENV STAGE PROD
+ENV STAGE DEV
+ENV BTC_VERSION classic
 RUN  set -x && apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
