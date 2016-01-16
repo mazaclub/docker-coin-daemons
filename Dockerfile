@@ -10,11 +10,12 @@ EXPOSE      8332 8333
 
 ENV BUILDER DOCKERHUB
 ENV WORKDIR $(pwd)
-ENV IMAGE mazalub/bitcoind-base
+ENV IMAGE mazalub/btc-unlimited-base
 ENV APP bitcoind 
 ENV COIN bitcoin
 ENV COIN_SYM btc 
-ENV STAGE PROD
+ENV BTC_VERSION unlimited
+ENV STAGE DEV
 RUN  set -x && apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
@@ -25,8 +26,9 @@ RUN echo "Building daemon" \
      && export COIN=bitcoin \
      && export APP=bitcoind \
      && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS=""; fi \
-     && git clone https://github.com/bitcoinclassic/bitcoinclassic  ${COIN} \
+     && git clone https://github.com/gandrewstone/BitcoinUnlimited  ${COIN} \
      && cd ${COIN} \
+     && git checkout 82fd77550aa0e62c2f2ec2fb747bfcafb433013f
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
      && ./autogen.sh \
