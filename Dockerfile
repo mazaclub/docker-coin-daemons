@@ -34,9 +34,12 @@ RUN echo "Building Daemon" \
      && echo "aab1f8ea8c7f131ff69dfa3b9437ba35531018be760132dd6373f41a591f6382  v0.5.3-0-gd05c03a.tar.gz" > v0.5.3-0-gd05c03a.tar.gz.sha256 \
      && sha256sum -c v0.5.3-0-gd05c03a.tar.gz.sha256 \
      && tar -xpzvf v0.5.3-0-gd05c03a.tar.gz \
-     && cd bitcoin-bitcoin-a8def6b/src \
+     && cd bitcoin-bitcoin-a8def6b \
      && cp /patches//bdb_maxintlocks_corrected.patch . \
-     && patch < bdb_maxintlocks_corrected.patch \
+     && echo "This patch doesnt' work right: patch < bdb_maxintlocks_corrected.patch" \
+     && echo "So here's a nice pre-patched one from the docker image repo" \
+     && cp /patches/db.cpp.patched src/db.cpp \
+     && cd src \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
      && sed -i 's/USE_UPNP\:\=0/USE_UPNP\:\=\-/g' makefile.unix \

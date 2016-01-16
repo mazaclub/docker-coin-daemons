@@ -5,8 +5,8 @@ diff -uNr a/src/db.cpp b/src/db.cpp
  
              dbenv.set_lg_dir(strLogDir.c_str());
              dbenv.set_lg_max(1000000);
--            dbenv.set_lk_max_locks(40000);
--            dbenv.set_lk_max_objects(40000);
+-            dbenv.set_lk_max_locks(10000);
+-            dbenv.set_lk_max_objects(10000);
 +            dbenv.set_lk_max_locks(2737000);
 +            dbenv.set_lk_max_objects(1119200);
 +            dbenv.set_lk_max_lockers(1119200);
