@@ -11,7 +11,7 @@ EXPOSE      8639 8639
 ENV BUILDER DOCKERHUB
 ENV GIT_TAG $(git rev-parse --short HEAD)
 ENV WORKDIR $(pwd)
-ENV IMAGE bitcoin/btc-therealbitcoin-base
+ENV IMAGE mazaclub/btc-therealbitcoin-base
 ENV APP bitcoind 
 ENV COIN bitcoin
 ENV COIN_SYM btc
@@ -29,8 +29,9 @@ RUN echo "Building Daemon" \
      && export APP=bitcoind \
      && wget http://thebitcoin.foundation/v0.5.3-0-gd05c03a.tar.gz \
      && echo "aab1f8ea8c7f131ff69dfa3b9437ba35531018be760132dd6373f41a591f6382  v0.5.3-0-gd05c03a.tar.gz" > v0.5.3-0-gd05c03a.tar.gz.sha256 \
-     && sha256sum -c v0.5.3-0-gd05c03a.tar.gz \
-     && cd ${COIN}/src \
+     && sha256sum -c v0.5.3-0-gd05c03a.tar.gz.sha256 \
+     && tar -xpzvf v0.5.3-0-gd05c03a.tar.gz \
+     && cd bitcoin-bitcoin-a8def6b/src \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
      && sed -i 's/USE_UPNP\:\=0/USE_UPNP\:\=\-/g' makefile.unix \

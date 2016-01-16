@@ -1,0 +1,47 @@
+#!/bin/bash 
+source /etc/container_environment.sh
+TXINDEX=${TXINDEX:-0}
+REINDEX=${REINDEX:-0}
+USER=${USER:-coin}
+COIN=${COIN:-bitcoin}
+COINDIR=${COINDIR:-/home/coin/.${COIN}}
+RPCPASSWORD=${RPCPASSWORD}
+RPCPORT=${RPCPORT:-8332}
+P2PPORT=${P2PPORT:-8333}
+
+# 
+sed '/reindex/d' ${COINDIR}/${COIN}.conf > /tmp/newconf
+sed  '/txindex/d' /tmp/newconf > "${COINDIR}"/"${COIN}".conf
+
+
+mk_rpcpass () {
+   echo "$(date +%m-%d:%Y:%H:%M) making rpcpassword"
+   sed -e '/rpcpassword/d' "${COINDIR}"/${COIN}.conf > /tmp/"${COIN}".newconf
+   cp /tmp/${COIN}.newconf  "${COINDIR}"/${COIN}.conf 
+   pass="$(apg -a0 -n1 -m64 -x64)" 
+   echo "rpcpassword=${pass}" >> "${COINDIR}"/${COIN}.conf   
+}
+
+if [ "${REINDEX}" = "1" ] 
+then
+   echo "reindex=1" >> "${COINDIR}"/${COIN}.conf
+fi
+if [ "${TXINDEX}" = "1" ]
+then 
+   echo "txindex=1" >> "${COINDIR}"/${COIN}.conf
+fi
+echo "$(date +%m-%d:%Y:%H:%M) Checking to see if this is the first known start of bitcoind ${COINDIR}"
+rpcpwd=$(grep rpcpassword ${COINDIR}/${COIN}.conf|awk -F\= '{print $2}')
+if [ !  -f "${COINDIR}"/${COIN}.conf ] 
+then 
+  test -d "${COINDIR}" || mkdir -pv "${COINDIR}"
+  cp -av /root/${COIN}.conf "${COINDIR}"/${COIN}.conf
+  mk_rpcpass
+fi
+if [ -z "${rpcpwd}" ] 
+then
+  mk_rpcpass
+fi
+echo "$(date +%m-%d:%Y:%H:%M) Starting ${COIN}d"
+chown -R ${USER}.${USER} ${COINDIR} 
+exec su - ${USER} -c "/usr/local/bin/${COIN}d" 
