@@ -17,13 +17,16 @@ ENV COIN bitcoin
 ENV COIN_SYM btc
 ENV STAGE DEV
 ENV BTC_VERSION thereealbitcoin
-RUN  apt-get update \
+RUN  mkdir /patches \
+     && apt-get update \
      && apt-get install -y libtool \
          wget bsdmainutils autoconf \
          apg libqrencode-dev libcurl4-openssl-dev \
          automake make ntp git build-essential \
          libssl-dev libboost-all-dev \
          libgmp-dev libmpfr-dev 
+COPY patches/ /patches
+
 RUN echo "Building Daemon" \
      && export COIN=bitcoin \
      && export APP=bitcoind \
@@ -32,6 +35,8 @@ RUN echo "Building Daemon" \
      && sha256sum -c v0.5.3-0-gd05c03a.tar.gz.sha256 \
      && tar -xpzvf v0.5.3-0-gd05c03a.tar.gz \
      && cd bitcoin-bitcoin-a8def6b/src \
+     && cp /patches//bdb_maxintlocks_corrected.patch . \
+     && patch < bdb_maxintlocks_corrected.patch \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \
      && sed -i 's/USE_UPNP\:\=0/USE_UPNP\:\=\-/g' makefile.unix \
