@@ -25,7 +25,7 @@ RUN echo "Building daemon" \
      && export COIN=bitcoin \
      && export APP=bitcoind \
      && if [ "${BUILDER}" = "LOCAL" ] ; then export MAKEJOBS="-j3" ; else export MAKEJOBS=""; fi \
-     && git clone https://github.com/bitcoin/bitcoin ${COIN} \
+     && git clone https://github.com/bitcoinclassic/bitcoinclassic  ${COIN} \
      && cd ${COIN} \
      && export BDB_INCLUDE_PATH="${BDB_PREFIX}/include" \
      && export BDB_LIB_PATH="/db-4.8.30.NC/build_unix" \

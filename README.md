@@ -6,12 +6,27 @@ Each coin is placed in its own branch, as is the base image
 
 Examples are available for series 0.8 and 0.9+ coinds 
 
+
 Each Branch supports an automated build 
  Base = maazaclub/coind-base
  MZC  = mazaclub/mazacoind-base
  NMC  = mazaclub/namecoind-base
  DASH = mazaclub/dashpay-base
  etc
+
+## Bitcoin Versions:
+Because of network developments in bitcoin, several versions will be offered
+For each branch, multiple tags may be available. 
+Latest tag will always be master branch from official sources
+Additional tags may be provided for release versions and / or specific patches
+
+ -  btc-core        = mazaclub/bitcoind-base
+ -  btc-classic     = mazaclub/btc-classic-base
+ -  btc-unlimited   = mazaclub/btc-unlimites-base
+ -  btc-therealbtc  = mazaclub/threalbitcoin-base
+
+
+
 
 mazaclub/XXXcoind-base Images are 
  FROM phusion/baseimage
