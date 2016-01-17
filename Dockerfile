@@ -10,7 +10,7 @@ EXPOSE      8332 8333
 
 ENV BUILDER DOCKERHUB
 ENV WORKDIR $(pwd)
-ENV IMAGE mazalub/bitcoind-base
+ENV IMAGE mazalub/btc-classic-base
 ENV APP bitcoind 
 ENV COIN bitcoin
 ENV COIN_SYM btc 
@@ -37,8 +37,7 @@ RUN echo "Building daemon" \
      && make \
      && make install \
      && mv ${APP} /usr/local/bin/ \
-     && cd / \
-     && rm -rf /bitcoin
+     && cd / 
  
 
 COPY . /

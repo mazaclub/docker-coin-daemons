@@ -25,6 +25,42 @@ Additional tags may be provided for release versions and / or specific patches
  -  btc-unlimited   = mazaclub/btc-unlimites-base
  -  btc-therealbtc  = mazaclub/threalbitcoin-base
 
+## Quick Start
+   ```
+   docker run -d -v /some/dir:/home/coin -p 8333:8333 -p 8332:8332 -e RPCPORT=8332 -e TXINDEX=1 mazaclub/btc-classic-base
+   ```
+Several command line environment variables are accepted, defaults are set. 
+
+Daemon runs from /etc/service/bitcoind/run vi /sbin/my_init entrypoint. 
+
+We use "docker-enter" to enter the container 
+   ```
+   docker run -it --rm -v /usr/local/bin:/target jpetazzo/nsenter
+   /usr/local/bin/docker-enter [Container_ID]
+   ```
+Daemon will shut down it /etc/service/bitcoind/run is not present
+   ```
+   mv /etc/service/bitcoind /tmp
+   ```
+Daemon will start once this is present again.
+
+## More Info
+
+These are developer images, and should contain complete source, .git directories, and 
+Dockerfiles used to build the image inside for reference. Because there is init-like control, the 
+container will continue to run if bitcoind is shut down. 
+
+These images are suitable for development of correlated services, such as 
+  - Electrum & Encompass Mercury Servers
+  - Block Explorers
+  - P2Pool nodes
+
+See [mazaclub/mazachain](https://github.com/mazaclub/mazachain) for an example of how we use 
+these for base layers for additional services. 
+
+
+
+
 
 
 
